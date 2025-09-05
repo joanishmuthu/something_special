@@ -26,15 +26,14 @@
     }
 
     h1 {
-      font-size: 2.2rem;
+      font-size: clamp(1.8em, 5vw, 3em);
       text-shadow: 0 0 15px #fff, 0 0 30px #ff69b4;
     }
 
     p {
-      font-size: 1.3rem;
+      font-size: clamp(1.2em, 4vw, 2em);
       margin: 20px 0;
       text-shadow: 0 0 10px #fff;
-      line-height: 1.5;
     }
 
     .buttons {
@@ -49,10 +48,10 @@
       background: #fff;
       color: #ff1493;
       border: none;
-      padding: 12px 20px;
+      padding: 12px 24px;
       border-radius: 25px;
       cursor: pointer;
-      font-size: 1rem;
+      font-size: 1.1em;
       transition: all 0.3s ease;
       box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
@@ -82,8 +81,14 @@
       background: pink;
       border-radius: 50%;
     }
-    .heart:before { top: -10px; left: 0; }
-    .heart:after { left: -10px; top: 0; }
+    .heart:before {
+      top: -10px;
+      left: 0;
+    }
+    .heart:after {
+      left: -10px;
+      top: 0;
+    }
 
     @keyframes float {
       0% { transform: translateY(0) rotate(45deg); opacity: 0.7; }
@@ -107,19 +112,23 @@
     }
 
     .photos img {
-      width: 220px;
-      max-width: 40vw;
+      width: 280px;
       border-radius: 15px;
       box-shadow: 0 0 25px rgba(255, 20, 147, 0.8);
       transform: rotate(-2deg);
       transition: transform 0.3s ease;
     }
 
-    .photos img:nth-child(2) { transform: rotate(2deg); }
-    .photos img:hover { transform: scale(1.05); }
+    .photos img:nth-child(2) {
+      transform: rotate(2deg);
+    }
+
+    .photos img:hover {
+      transform: scale(1.05);
+    }
 
     .destiny {
-      font-size: 2rem;
+      font-size: 3em;
       font-weight: bold;
       color: #fff;
       text-shadow: 0 0 20px #ff69b4, 0 0 40px #ff1493;
@@ -131,17 +140,25 @@
       to { text-shadow: 0 0 35px #fff, 0 0 55px #ff69b4; }
     }
 
-    /* 📱 Mobile responsiveness */
-    @media (max-width: 600px) {
-      h1 { font-size: 2rem; }
-      p { font-size: 1.1rem; }
-      .destiny { font-size: 1.8rem; }
+    /* Proposal buttons */
+    .proposal-buttons {
+      display: flex;
+      gap: 20px;
+      margin-top: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
     }
 
-    @media (max-width: 400px) {
-      h1 { font-size: 1.7rem; }
-      p { font-size: 1rem; }
-      button { font-size: 0.9rem; padding: 10px 16px; }
+    #noBtn {
+      position: relative;
+    }
+
+    #countdown {
+      font-size: clamp(1em, 3.5vw, 1.6em);
+      margin-top: 15px;
+      font-weight: bold;
+      color: #fff;
+      text-shadow: 0 0 12px #ff69b4;
     }
   </style>
 </head>
@@ -150,6 +167,7 @@
     <h1 id="title">Hey Love 💖</h1>
     <p id="message"></p>
     <div id="special" style="display: none;"></div>
+    <div id="countdown"></div>
     <div class="buttons">
       <button onclick="prevPage()">⬅ Back</button>
       <button onclick="nextPage()">Next ➡</button>
@@ -169,14 +187,41 @@
     let page = 0;
     const messageEl = document.getElementById("message");
     const specialEl = document.getElementById("special");
+    const countdownEl = document.getElementById("countdown");
+
+    // Start date = 23rd August 2025
+    const startDate = new Date("2025-08-23T00:00:00");
+
+    function updateCountdown() {
+      const now = new Date();
+      const diff = now - startDate;
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
+      countdownEl.innerHTML = `We've been together since 23rd August 2025 💖<br>${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds`;
+    }
+    setInterval(updateCountdown, 1000);
 
     function renderPage() {
       if (page < messages.length) {
         messageEl.style.display = "block";
         specialEl.style.display = "none";
         messageEl.innerHTML = messages[page];
+        countdownEl.style.display = page === 1 ? "block" : "none";
+
+        // Proposal page
+        if (page === messages.length - 1) {
+          messageEl.innerHTML += `
+            <div class="proposal-buttons">
+              <button id="yesBtn" onclick="sayYes()">Yes 💗</button>
+              <button id="noBtn" onmouseover="moveNoBtn()" ontouchstart="moveNoBtn()">No 😜</button>
+            </div>
+          `;
+        }
       } else {
         messageEl.style.display = "none";
+        countdownEl.style.display = "none";
         specialEl.style.display = "block";
         specialEl.innerHTML = `
           <div class="scrapbook">
@@ -204,6 +249,19 @@
       }
     }
 
+    function sayYes() {
+      alert("Yayyy!! You said YES 💍💖 Forever & Always! 😍");
+    }
+
+    function moveNoBtn() {
+      const noBtn = document.getElementById("noBtn");
+      const x = Math.random() * (window.innerWidth - 100);
+      const y = Math.random() * (window.innerHeight - 100);
+      noBtn.style.position = "absolute";
+      noBtn.style.left = x + "px";
+      noBtn.style.top = y + "px";
+    }
+
     // Hearts generator
     function createHeart() {
       const heart = document.createElement("div");
@@ -217,6 +275,7 @@
 
     // Initial render
     renderPage();
+    updateCountdown();
   </script>
 </body>
 </html>
