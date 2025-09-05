@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Love Surprise 💖</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #ffb6c1, #ff69b4, #ff1493);
+      overflow: hidden;
+      text-align: center;
+      color: #4a0033;
+    }
+    .message {
+      background: rgba(255, 255, 255, 0.7);
+      padding: 20px 30px;
+      border-radius: 20px;
+      font-size: 1.4rem;
+      max-width: 90%;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      animation: fadeIn 0.6s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    button {
+      margin-top: 20px;
+      padding: 12px 24px;
+      font-size: 1rem;
+      background: #ff1493;
+      color: white;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: #e60073;
+    }
+    .heart {
+      position: absolute;
+      bottom: 0;
+      color: red;
+      font-size: 24px;
+      animation: floatUp 2s linear forwards;
+    }
+    @keyframes floatUp {
+      from { transform: translateY(0); opacity: 1; }
+      to { transform: translateY(-100vh); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="message" id="message"></div>
+  <button id="nextBtn">Next 💖</button>
+
+  <script>
+    const messages = [
+      "Hey my love 😙, Here's a lil surprise for u!!",
+      "Its been jus 15 days wid you innu crct ah sollanum na Its been 360 hours or 21,600 minutes🤭 but it never felt like it was 15 days 🫠.",
+      "You are literally how i pictured how matured love should be🫠✨. Konjo childishness, konjo fun, konjo romance, konjo mature🫠 ahhhh🫠..... I am blessed to have u in my life dear😁✨",
+      "Lets enjoy and explore life together my love😁✨. With you till the end of my line kutty ma💗",
+      "Soooo rombaaa pesama takkuni sollidre.... En kanna paaruuu😁",
+      "Will you marry me my dear😁💗"
+    ];
+
+    let index = 0;
+    const messageEl = document.getElementById("message");
+    const nextBtn = document.getElementById("nextBtn");
+    messageEl.textContent = messages[index];
+
+    nextBtn.addEventListener("click", () => {
+      createHearts();
+      index++;
+      if (index < messages.length) {
+        setTimeout(() => {
+          messageEl.textContent = messages[index];
+        }, 500);
+      }
+      if (index === messages.length - 1) {
+        nextBtn.style.display = "none"; // Hide button after last message
+      }
+    });
+
+    function createHearts() {
+      for (let i = 0; i < 15; i++) {
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.textContent = "❤️";
+        heart.style.left = Math.random() * window.innerWidth + "px";
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 2000);
+      }
+    }
+  </script>
+</body>
+</html>
